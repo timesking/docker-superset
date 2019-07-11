@@ -118,28 +118,32 @@ initialize_superset
 echo Container deployment type: $SUPERSET_ENV
 if [ "$SUPERSET_ENV" == "local" ]; then
     # Start superset worker for SQL Lab
-    celery worker --app=superset.sql_lab:celery_app --pool=gevent -Ofair -n worker1 &
-    celery flower --app=superset.sql_lab:celery_app &
+    celery worker --app=superset.tasks.celery_app:app --pool=gevent -Ofair -n worker1 &
+    celery flower --app=superset.tasks.celery_app:app &
     echo Started Celery worker and Flower UI.
 
     # Start the dev web server
     FLASK_APP=superset:app flask run -p 8088 --with-threads --reload --debugger --host=0.0.0.0
 elif [ "$SUPERSET_ENV" == "prod" ]; then
     # Start superset worker for SQL Lab
-    celery worker --app=superset.sql_lab:celery_app --pool=gevent -Ofair -nworker1 &
-    celery worker --app=superset.sql_lab:celery_app --pool=gevent -Ofair -nworker2 &
-    celery flower --app=superset.sql_lab:celery_app &
+    celery worker --app=superset.tasks.celery_app:app --pool=gevent -Ofair -nworker1 &
+    celery worker --app=superset.tasks.celery_app:app --pool=gevent -Ofair -nworker2 &
+    celery flower --app=superset.tasks.celery_app:app &
     echo Started Celery workers[worker1, worker2] and Flower UI.
 
     # Start the prod web server
     gunicorn -w 10 -k gevent --timeout 120 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app
 elif [ "$SUPERSET_ENV" == "cluster" ] && [ "$NODE_TYPE" == "worker" ]; then
     # Start superset worker for SQL Lab
-    celery flower --app=superset.sql_lab:celery_app &
-    celery worker --app=superset.sql_lab:celery_app --pool=gevent -Ofair
+    celery flower --app=superset.tasks.celery_app:app &
+    celery worker --app=superset.tasks.celery_app:app --pool=gevent -Ofair
 elif [ "$SUPERSET_ENV" == "cluster" ] && [ "$NODE_TYPE" == "server" ]; then
     # Start the prod web server
     gunicorn -w 10 -k gevent --timeout 120 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app
+    # FLASK_APP=superset:app flask run -p 8088 --with-threads --reload --debugger --host=0.0.0.0
+elif [ "$SUPERSET_ENV" == "cluster" ] && [ "$NODE_TYPE" == "beat" ]; then
+    # Start the prod web server
+    celery beat --app=superset.tasks.celery_app:app
 else
     help
     exit -1
