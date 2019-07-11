@@ -104,11 +104,24 @@ if $(is_empty_string $SUPERSET_ENV); then
        exit -1
     fi
 else
-     INVOCATION_TYPE="COMPOSE"
-     export INVOCATION_TYPE=$INVOCATION_TYPE
-     echo "export INVOCATION_TYPE="$INVOCATION_TYPE>>~/.bashrc
-     echo "INVOCATION_TYPE="$INVOCATION_TYPE>>~/.profile
-     echo Environment Variable Exported: INVOCATION_TYPE: $INVOCATION_TYPE
+    if $(is_empty_string $INVOCATION_TYPE); then
+        INVOCATION_TYPE="COMPOSE"
+        export INVOCATION_TYPE=$INVOCATION_TYPE
+        echo "export INVOCATION_TYPE="$INVOCATION_TYPE>>~/.bashrc
+        echo "INVOCATION_TYPE="$INVOCATION_TYPE>>~/.profile
+        echo Environment Variable Exported: INVOCATION_TYPE: $INVOCATION_TYPE
+    else
+        echo "K8S set INVOCATION_TYPE as k8s, SUPERSET_ENV as cluster"
+        echo 'Put below environment variable into K8S pod'
+          echo -e 'MYSQL_USER: '
+          echo -e 'MYSQL_PASS: '
+          echo -e 'MYSQL_DATABASE: '
+          echo -e 'MYSQL_HOST: '
+          echo -e 'MYSQL_PORT: '
+          echo -e 'REDIS_HOST: '
+          echo -e 'REDIS_PORT: '
+        echo 
+    fi
 fi
 
 # initializing the superset[should only be run for the first time of environment setup.]
