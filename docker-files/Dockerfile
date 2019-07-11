@@ -44,6 +44,10 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -; \
     apt-get update; \
     apt-get install -y yarn
 
+RUN apt-get install -y --no-install-recommends ca-certificates firefox-esr \
+&& curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
+&& rm -rf /var/lib/apt/lists/*
+
 WORKDIR $SUPERSET_HOME
 
 # Download & install superset 0.29.rc4 version
