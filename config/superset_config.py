@@ -16,7 +16,7 @@ def get_env_variable(var_name, default=None):
             raise EnvironmentError(error_msg)
 
 invocation_type = get_env_variable('INVOCATION_TYPE')
-if invocation_type == 'COMPOSE':
+if invocation_type in ('COMPOSE', 'K8S'):
     MYSQL_USER = get_env_variable('MYSQL_USER')
     MYSQL_PASS = get_env_variable('MYSQL_PASS')
     MYSQL_HOST = get_env_variable('MYSQL_HOST')
@@ -36,7 +36,7 @@ else:
 
 REDIS_HOST=''
 REDIS_PORT=''
-if invocation_type == 'COMPOSE':
+if invocation_type in ('COMPOSE', 'K8S'):
     REDIS_HOST = get_env_variable('REDIS_HOST')
     REDIS_PORT = get_env_variable('REDIS_PORT')
     RESULTS_BACKEND = RedisCache(host=REDIS_HOST, port=REDIS_PORT, key_prefix='superset_results')
