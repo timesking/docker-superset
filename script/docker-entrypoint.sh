@@ -110,17 +110,30 @@ else
         echo "export INVOCATION_TYPE="$INVOCATION_TYPE>>~/.bashrc
         echo "INVOCATION_TYPE="$INVOCATION_TYPE>>~/.profile
         echo Environment Variable Exported: INVOCATION_TYPE: $INVOCATION_TYPE
-    else
+    else 
         echo "K8S set INVOCATION_TYPE as k8s, SUPERSET_ENV as cluster"
         echo 'Put below environment variable into K8S pod'
           echo -e 'MYSQL_USER: '
           echo -e 'MYSQL_PASS: '
-          echo -e 'MYSQL_DATABASE: '
-          echo -e 'MYSQL_HOST: '
+          echo -e 'MYSQL_DATABASE: ${MYSQL_DATABASE}'
+          echo -e 'MYSQL_HOST: ${MYSQL_HOST}'
           echo -e 'MYSQL_PORT: '
-          echo -e 'REDIS_HOST: '
+          echo -e 'REDIS_HOST: ${REDIS_HOST}'
           echo -e 'REDIS_PORT: '
         echo 
+
+       #oauth of flower
+        #https://flower.readthedocs.io/en/latest/auth.html#google-oauth-2-0
+        # $ export FLOWER_OAUTH2_KEY=...
+        # $ export FLOWER_OAUTH2_SECRET=...
+        # $ export FLOWER_OAUTH2_REDIRECT_URI=http://flower.example.com/login
+        # $ celery flower --auth=.*@example\.com
+
+        if $(is_empty_string $FLOWER_OAUTH_EMAIL_MATCH); then
+            export FLOWERAUTH=
+        else
+            export FLOWERAUTH=--auth="$FLOWER_OAUTH_EMAIL_MATCH"
+        fi         
     fi
 fi
 
@@ -148,7 +161,7 @@ elif [ "$SUPERSET_ENV" == "prod" ]; then
     gunicorn -w 10 -k gevent --timeout 120 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app
 elif [ "$SUPERSET_ENV" == "cluster" ] && [ "$NODE_TYPE" == "worker" ]; then
     # Start superset worker for SQL Lab
-    celery flower --app=superset.tasks.celery_app:app &
+    celery flower --app=superset.tasks.celery_app:app ${FLOWERAUTH} &
     celery worker --app=superset.tasks.celery_app:app --pool=gevent -Ofair
 elif [ "$SUPERSET_ENV" == "cluster" ] && [ "$NODE_TYPE" == "server" ]; then
     # Start the prod web server
