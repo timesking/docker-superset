@@ -6,9 +6,9 @@
 
 # sha256:715c905479b18933f54c92feb247d6ed64509c6adc9b64989fc041d597ed94b4
 # default-mysql-client,libssl-dev
-FROM python:3.6 
+# FROM python:3.6 
 
-# FROM python@sha256:976cd81b859b13ef6c1366517f14bd13754f535fdb3eb41c252214fdd3245dde
+FROM python@sha256:976cd81b859b13ef6c1366517f14bd13754f535fdb3eb41c252214fdd3245dde
 #
 MAINTAINER Abhishek Sharma <abhioncbr@yahoo.com>
 
@@ -33,11 +33,11 @@ RUN apt-get install -y apt-transport-https apt-utils
 
 # Install common useful packages
 
-RUN apt-get install -y vim less curl netcat postgresql-client redis-tools default-mysql-client
+RUN apt-get install -y vim less curl netcat postgresql-client redis-tools mysql-client
 
 #docker build was failing because of cryptography package failure wirl libssl-dev.
 #instead of libssl-dev it is not set to `libssl1.0-dev`
-RUN apt-get update -y && apt-get install -y build-essential libssl-dev \
+RUN apt-get update -y && apt-get install -y build-essential libssl1.0-dev \
     libffi-dev python3-dev libsasl2-dev libldap2-dev libxi-dev
 
 # Install nodejs for custom build
