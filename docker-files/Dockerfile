@@ -4,7 +4,8 @@
 # BUILD: docker build --rm -t docker-apache-superset:0.28.1 -f docker-files/DockerFile .
 # Modified/revamped version of the https://github.com/apache/incubator-superset/blob/master/contrib/docker/Dockerfile
 
-FROM python:3.6
+# FROM python:3.6
+FROM python@sha256:976cd81b859b13ef6c1366517f14bd13754f535fdb3eb41c252214fdd3245dde
 MAINTAINER Abhishek Sharma <abhioncbr@yahoo.com>
 
 # Build argument[version of apache-superset to be build: pass value while building image]
@@ -28,7 +29,7 @@ RUN apt-get install -y apt-transport-https apt-utils
 
 # Install common useful packages
 # TODO: new python 3.6 can't install mysql-client
-RUN apt-get install -y vim less curl netcat postgresql-client redis-tools 
+RUN apt-get install -y vim less curl netcat postgresql-client redis-tools mysql-client
 
 #docker build was failing because of cryptography package failure wirl libssl-dev.
 #instead of libssl-dev it is not set to `libssl1.0-dev`
