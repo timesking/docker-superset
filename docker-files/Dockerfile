@@ -27,7 +27,8 @@ RUN apt-get update -y
 RUN apt-get install -y apt-transport-https apt-utils
 
 # Install common useful packages
-RUN apt-get install -y vim less curl netcat postgresql-client mysql-client redis-tools
+# TODO: new python 3.6 can't install mysql-client
+RUN apt-get install -y vim less curl netcat postgresql-client redis-tools 
 
 #docker build was failing because of cryptography package failure wirl libssl-dev.
 #instead of libssl-dev it is not set to `libssl1.0-dev`
