@@ -21,6 +21,7 @@ pinotdb==0.2.3                      # PintoDB
 #
 # Optional packages
 #
+s3werkzeugcache==0.1.2
 flower==0.9.3
 # bug in oauth https://github.com/jupyter/notebook/issues/3397
 # another solution https://github.com/erdewit/nest_asyncio
