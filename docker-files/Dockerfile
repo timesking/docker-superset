@@ -51,7 +51,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -; \
     apt-get install -y yarn
 
 # RUN apt-get install -y --no-install-recommends ca-certificates firefox-esr \
-curl -O http://security-cdn.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_60.7.1esr-1~deb8u1_amd64.deb \
+RUN curl -O http://security-cdn.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_60.7.1esr-1~deb8u1_amd64.deb \
 && dpkg -i firefox-esr_60.7.1esr-1~deb8u1_amd64.deb && rm firefox-esr_60.7.1esr-1~deb8u1_amd64.deb \
 && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 && rm -rf /var/lib/apt/lists/*
