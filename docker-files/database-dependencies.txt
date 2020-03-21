@@ -40,3 +40,7 @@ s3transfer==0.1.13        # via boto3
 oauthlib==2.0.6
 requests-oauthlib==0.8.0
 Flask-OAuthlib==0.9.5
+
+gevent==1.4.0
+psycopg2-binary==2.7.5
+redis==3.2.1
