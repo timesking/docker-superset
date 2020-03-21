@@ -60,7 +60,7 @@ RUN mkdir -p /home/superset/.cache
 RUN mkdir -p /home/superset/config
 COPY docker-files/database-dependencies.txt .
 RUN pip install --upgrade setuptools pip \
-    && pip install -r requirements.txt -r database-dependencies.txt \
+    && pip install -r requirements.txt -r requirements-dev.txt -r database-dependencies.txt \
     && pip install -e . \
     && rm -rf /root/.cache/pip
 
