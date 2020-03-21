@@ -45,10 +45,13 @@ is_empty_string () {
 
 # function to initialize apache-superset
 initialize_superset () {
-    USER_COUNT=$(fabmanager list-users --app superset | awk '/email/ {print}' | wc -l)
+    # USER_COUNT=$(fabmanager list-users --app superset | awk '/email/ {print}' | wc -l)
+    USER_COUNT=$(flask fab list-users | awk '/email/ {print}' | wc -l)
+    echo Starting Initialization[if needed 2]
     if [ "$?" ==  0 ] && [ $USER_COUNT == 0 ]; then
         # Create an admin user (you will be prompted to set username, first and last name before setting a password)
-        fabmanager create-admin --app superset --username admin --firstname apache --lastname superset --email apache-superset@fab.com --password admin
+        #fabmanager create-admin --app superset --username admin --firstname apache --lastname superset --email apache-superset@fab.com --password admin
+        flask fab create-admin --username admin --firstname apache --lastname superset --email apache-superset@fab.com --password admin
 
         # Initialize the database
         superset db upgrade

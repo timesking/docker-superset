@@ -36,16 +36,33 @@ else:
 
 REDIS_HOST=''
 REDIS_PORT=''
-if invocation_type == 'COMPOSE':
+REDIS_DB=0
+if invocation_type in ('COMPOSE', 'K8S'):
     REDIS_HOST = get_env_variable('REDIS_HOST')
     REDIS_PORT = get_env_variable('REDIS_PORT')
-    RESULTS_BACKEND = RedisCache(host=REDIS_HOST, port=REDIS_PORT, key_prefix='superset_results')
+    REDIS_DB = int(get_env_variable('REDIS_DB'))
+    RESULTS_BACKEND = RedisCache(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, key_prefix='superset_results')
 elif invocation_type == 'RUN':
     REDIS_HOST = get_env_variable('REDIS_URL').split(":")[1].replace("/","")
     REDIS_PORT = get_env_variable('REDIS_URL').split(":")[2].replace("/0","")
-    RESULTS_BACKEND = RedisCache(host=REDIS_HOST, port=REDIS_PORT, key_prefix='superset_results')
+    RESULTS_BACKEND = RedisCache(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, key_prefix='superset_results')
 else:
     RESULTS_BACKEND = None
+
+
+CACHE_CONFIG = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24, # 1 day default (in secs)
+    'CACHE_KEY_PREFIX': 'superset_results',
+    'CACHE_REDIS_URL': 'redis://%s:%s/%d' % (REDIS_HOST, REDIS_PORT, REDIS_DB),
+}
+
+TABLE_NAMES_CACHE_CONFIG = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24, # 1 day default (in secs)
+    'CACHE_KEY_PREFIX': 'superset_results',
+    'CACHE_REDIS_URL': 'redis://%s:%s/%d' % (REDIS_HOST, REDIS_PORT, REDIS_DB),
+}
 
 class CeleryConfig(object):
     BROKER_URL = ('redis://%s:%s/0' % (REDIS_HOST, REDIS_PORT), 'sqla+sqlite:///'+ os.path.join(DATA_DIR, 'celeryDB.db'))[bool(not REDIS_HOST)]

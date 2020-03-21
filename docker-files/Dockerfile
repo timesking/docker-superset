@@ -69,7 +69,7 @@ RUN pip install -e . \
     && rm -rf /root/.cache/pip
 
 ENV PATH=${SUPERSET_HOME}/superset/bin:$PATH \
-    PYTHONPATH=${SUPERSET_HOME}superset/:${SUPERSET_HOME}config/:$PYTHONPATH
+    PYTHONPATH=${SUPERSET_HOME}config/
 
 # Install superset python packages
 # RUN pip install --install-option="--prefix=$SUPERSET_HOME" superset==$SUPERSET_VERSION
