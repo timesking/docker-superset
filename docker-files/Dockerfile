@@ -28,7 +28,7 @@ RUN apt-get update -y
 RUN apt-get install -y apt-transport-https apt-utils
 
 # Install common useful packages
-RUN apt-get install -y vim less curl netcat postgresql-client default-mysql-client redis-tools
+RUN apt-get install -y vim less curl netcat postgresql-client default-mysql-client redis-tools gdebi-core
 
 #docker build was failing because of cryptography package failure wirl libssl-dev.
 #instead of libssl-dev it is not set to `libssl1.0-dev`
@@ -45,10 +45,10 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 # && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 # && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y --no-install-recommends ca-certificates libasound2 libdbus-glib-1-2 libgtk-3-0 libstartup-notification0 libx11-xcb1\
-&& curl -O http://security.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
-&& dpkg -i firefox-esr_68.6.0esr-1~deb8u1_amd64.deb && rm firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
-&& curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
+RUN apt-get install -y --no-install-recommends ca-certificates \
+&& wget http://security.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
+&& gdebi -n firefox-esr_68.6.0esr-1~deb8u1_amd64.deb && rm firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
+&& curl -L -c cookie.txt https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR $SUPERSET_HOME
