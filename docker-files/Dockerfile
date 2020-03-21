@@ -45,6 +45,12 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 # && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 # && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get install -y --no-install-recommends ca-certificates libasound2 libdbus-glib-1-2 libgtk-3-0 libstartup-notification0 libx11-xcb1\
+&& curl -O http://security-cdn.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_60.7.1esr-1~deb8u1_amd64.deb \
+&& dpkg -i firefox-esr_60.7.1esr-1~deb8u1_amd64.deb && rm firefox-esr_60.7.1esr-1~deb8u1_amd64.deb \
+&& curl -L https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
+&& rm -rf /var/lib/apt/lists/*
+
 WORKDIR $SUPERSET_HOME
 
 # Download & install superset 0.29.rc4 version

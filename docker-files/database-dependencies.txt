@@ -22,8 +22,12 @@ gsheetsdb==0.1.9                    # Google Sheets
 #
 # Optional packages
 #
+s3werkzeugcache==0.1.2
 flower==0.9.3
+# bug in oauth https://github.com/jupyter/notebook/issues/3397
+# another solution https://github.com/erdewit/nest_asyncio
 tornado==5.1.1            # via flower
+#tornado==4.5.3            # via flower
 thrift-sasl==0.3.0
 thrift==0.11.0
 sasl==0.2.1               # via thrift-sasl
