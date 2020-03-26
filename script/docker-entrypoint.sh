@@ -49,12 +49,12 @@ initialize_superset () {
     USER_COUNT=$(flask fab list-users | awk '/email/ {print}' | wc -l)
     echo Starting Initialization[if needed 2]
     if [ "$?" ==  0 ] && [ $USER_COUNT == 0 ]; then
+        # Initialize the database
+        superset db upgrade
+                
         # Create an admin user (you will be prompted to set username, first and last name before setting a password)
         #fabmanager create-admin --app superset --username admin --firstname apache --lastname superset --email apache-superset@fab.com --password admin
         flask fab create-admin --username admin --firstname apache --lastname superset --email apache-superset@fab.com --password admin
-
-        # Initialize the database
-        superset db upgrade
 
         # Load some data to play with
         superset load_examples
