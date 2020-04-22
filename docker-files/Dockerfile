@@ -9,7 +9,7 @@ FROM python:${PY_VER}
 MAINTAINER Abhishek Sharma <abhioncbr@yahoo.com>
 
 # Build argument[version of apache-superset to be build: pass value while building image]
-ARG SUPERSET_VERSION=0.36.0rc1
+ARG SUPERSET_VERSION=0.36.0
 
 ENV SUPERSET_HOME=/home/superset/
 ENV SUPERSET_DOWNLOAD_URL=https://github.com/apache/incubator-superset/archive/$SUPERSET_VERSION.tar.gz
