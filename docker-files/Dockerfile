@@ -46,8 +46,8 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 # && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install -y --no-install-recommends ca-certificates \
-&& wget http://security.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
-&& gdebi -n firefox-esr_68.6.0esr-1~deb8u1_amd64.deb && rm firefox-esr_68.6.0esr-1~deb8u1_amd64.deb \
+&& wget http://security.debian.org/debian-security/pool/updates/main/f/firefox-esr/firefox-esr_68.7.0esr-1~deb8u1_amd64.deb \
+&& gdebi -n firefox-esr_68.7.0esr-1~deb8u1_amd64.deb && rm firefox-esr_68.7.0esr-1~deb8u1_amd64.deb \
 && curl -L -c cookie.txt https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 && rm -rf /var/lib/apt/lists/*
 
