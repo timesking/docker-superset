@@ -9,10 +9,10 @@ FROM python:${PY_VER}
 MAINTAINER Abhishek Sharma <abhioncbr@yahoo.com>
 
 # Build argument[version of apache-superset to be build: pass value while building image]
-ARG SUPERSET_VERSION=0.36.0
+ARG SUPERSET_FOLDER
 
 ENV SUPERSET_HOME=/home/superset/
-ENV SUPERSET_DOWNLOAD_URL=https://github.com/apache/incubator-superset/archive/$SUPERSET_VERSION.tar.gz
+
 
 # Add a normal superset group & user
 # Change group & user id as per your requirement.
@@ -51,11 +51,11 @@ RUN apt-get install -y --no-install-recommends ca-certificates \
 && curl -L -c cookie.txt https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz | tar xz -C /usr/local/bin \
 && rm -rf /var/lib/apt/lists/*
 
+COPY $SUPERSET_FOLDER $SUPERSET_HOME
 WORKDIR $SUPERSET_HOME
-
 # Download & install superset 0.29.rc4 version
-RUN wget -O superset.tar.gz $SUPERSET_DOWNLOAD_URL
-RUN tar -xzf superset.tar.gz -C $SUPERSET_HOME --strip-components=1 && rm superset.tar.gz
+# RUN wget -O superset.tar.gz $SUPERSET_DOWNLOAD_URL
+# RUN tar -xzf superset.tar.gz -C $SUPERSET_HOME --strip-components=1 && rm superset.tar.gz
 
 RUN cd superset-frontend \
     && npm ci \
